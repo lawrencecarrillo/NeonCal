@@ -1,28 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Neon Sparkle Organizer</title>
-    
-    <link rel="stylesheet" href="style.css">
+<h1 class="sparkle-header">APRIL 2026</h1>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-</head>
-<body>
+<div class="calc-btn-toggle" onclick="toggleCalc()">🧮</div>
 
-    <h1>NEON DO</h1>
-
-    <div class="calendar-header">JANUARY 2026</div>
+<div id="calc-sidebar">
+    <h2 style="color:var(--neon-cyan)">NEON CALC</h2>
+    <p>Calculator coming soon...</p>
+    <button onclick="toggleCalc()">CLOSE</button>
+</div>
 
 <div class="calendar-grid" id="calendar"></div>
 
-<div class="input-box" style="margin-top: 20px;">
-    <select id="daySelect"></select> <input type="text" id="taskInput" placeholder="Task or Bill (add $)...">
-    <button onclick="addTask()">ADD TO DAY</button>
+<div style="background: #111; padding: 20px; border-top: 5px solid var(--neon-pink);">
+    <select id="daySelect">
+        <option value="8">Day 8</option>
+    </select>
+    
+    <select id="typeSelect">
+        <option value="task">TASK (LIME)</option>
+        <option value="bill">BILL (GOLD)</option>
+        <option value="event">EVENT (CYAN)</option>
+    </select>
+    
+    <input type="text" id="taskInput" placeholder="What's the tea?">
+    <button onclick="addTask()" style="background:var(--neon-pink); padding: 10px;">ADD TO LIFE</button>
 </div>
-    <div class="task-list" id="taskList"></div>
-
-    <script src="script.js"></script>
-</body>
-</html>
