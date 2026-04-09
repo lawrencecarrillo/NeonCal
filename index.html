@@ -1,48 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEON DO | 2026</title>
+<div class="theme-switcher">
+    <button class="theme-btn" style="background:#ff00ff" onclick="setTheme('neon')">NEON</button>
+    <button class="theme-btn" style="background:#fff; color:#000" onclick="setTheme('primary')">PRIMARY</button>
+    <button class="theme-btn" style="background:#3e2723; color:#fff" onclick="setTheme('bank')">BANK</button>
+</div>
+
+<h1 class="sparkle-header" id="headerTitle">APRIL 2026</h1>
+
+<div class="calendar-grid" id="calendar"></div>
+
+<div class="input-panel">
+    <select id="daySelect"></select>
+    <select id="typeSelect">
+        <option value="task">TASK</option>
+        <option value="bill">BILL</option>
+    </select>
     
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <input type="text" id="taskInput" placeholder="What's the plan?">
 
-    <h1 class="sparkle-header">APRIL 2026</h1>
+    <select id="recurrenceSelect" style="padding: 10px; border-radius: 8px;">
+        <option value="none">ONE TIME ONLY</option>
+        <option value="7">WEEKLY</option>
+        <option value="14">BI-WEEKLY</option>
+        <option value="30">MONTHLY</option>
+    </select>
 
-    <div class="calc-btn-toggle" onclick="toggleCalc()">🧮</div>
-
-    <div id="calc-sidebar">
-        <h2 style="color:var(--neon-lime); text-align: center;">NEON CALC</h2>
-        <div class="calc-display">0.00</div>
-        <button onclick="toggleCalc()" class="close-btn">CLOSE</button>
-    </div>
-
-    <div class="calendar-container">
-        <div class="weekday-headers">
-            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div>
-            <div>Thu</div><div>Fri</div><div>Sat</div>
-        </div>
-
-        <div class="calendar-grid" id="calendar"></div>
-    </div>
-
-    <div class="input-panel">
-        <div class="input-row">
-            <select id="daySelect"></select>
-            <select id="typeSelect">
-                <option value="task">TASK (LIME)</option>
-                <option value="bill">BILL (GOLD)</option>
-                <option value="event">EVENT (CYAN)</option>
-            </select>
-        </div>
-        <input type="text" id="taskInput" placeholder="Organize your life in color...">
-        <button onclick="addTask()" class="add-btn">ADD TO LIFE</button>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+    <button onclick="addTask()" class="add-btn">ADD TO LIFE</button>
+</div>
