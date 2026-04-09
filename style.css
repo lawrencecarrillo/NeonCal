@@ -18,7 +18,52 @@ body {
 
 /* --- DEBUGGED HEADER --- */
 .sparkle-header {
-    text-align: center;
+    text-align: center;<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEON DO | 2026 Organizer</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1 class="sparkle-header">APRIL 2026</h1>
+
+    <div class="calc-btn-toggle" onclick="toggleCalc()">🧮</div>
+
+    <div id="calc-sidebar">
+        <h2 style="color:var(--neon-lime); text-align: center;">NEON CALC</h2>
+        <div style="background: #222; padding: 15px; border-radius: 10px; border: 1px solid var(--neon-cyan); height: 300px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+            <p style="color: #666; font-size: 12px; text-align: center;">[ Calculator Interface ]</p>
+            <div style="color: var(--neon-cyan); font-family: monospace; font-size: 20px;">0.00</div>
+        </div>
+        <button onclick="toggleCalc()" style="width: 100%; margin-top: 20px; background: var(--neon-pink); border: none; padding: 15px; font-weight: bold; border-radius: 8px; cursor: pointer; color: white; text-transform: uppercase;">CLOSE</button>
+    </div>
+
+    <div class="calendar-container">
+        
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); width: 100%; text-align: center; font-weight: 900; color: var(--neon-purple); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; font-size: 14px;">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+        </div>
+
+        <div class="calendar-grid" id="calendar"></div>
+
+    </div>
+
+    <div style="background: #111; padding: 30px; border-top: 5px solid var(--neon-pink); margin-top: 30px; display: flex; flex-direction: column; gap: 15px; align-items: center;">
+        
+        <div style="display: flex; gap: 10px; width: 100%; max-width: 600px;">
+            <select id="daySelect" style="background: #000; color: var(--neon-cyan); border: 2px solid var(--neon-cyan); padding: 15px; border-radius: 10px; flex: 1;
     font-size: clamp(2rem, 8vw, 4rem); /* Responsive size: looks good on Mac & iPhone */
     padding: 20px;
     margin: 0;
