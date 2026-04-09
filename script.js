@@ -1,42 +1,27 @@
 const cal = document.getElementById('calendar');
 const daySelect = document.getElementById('daySelect');
 
-// 1. Setup the 2026 Grid
-function initCalendar() {
-    cal.innerHTML = ""; // Clear existing
-    daySelect.innerHTML = ""; // Clear dropdown
+function init() {
+    // April 2026 starts on Wednesday (3 spacers needed: Sun, Mon, Tue)
+    const spacers = 3;
+    const totalDays = 30;
 
-    // APRIL 2026: Starts on Wednesday. 
-    // Sunday=0, Monday=1, Tuesday=2, WEDNESDAY=3.
-    const startingDay = 3; 
-    const daysInMonth = 30;
-
-    // ADD SPACER BOXES so April 1st is on Wednesday
-    for (let s = 0; s < startingDay; s++) {
-        const spacer = document.createElement('div');
-        spacer.className = 'day-tile spacer'; // style this to have no border in CSS
-        spacer.style.border = "none";
-        spacer.style.background = "transparent";
-        cal.appendChild(spacer);
+    // Create spacers
+    for (let i = 0; i < spacers; i++) {
+        const div = document.createElement('div');
+        div.style.border = "none";
+        cal.appendChild(div);
     }
 
-    // GENERATE ACTUAL DAYS
-    for (let i = 1; i <= daysInMonth; i++) {
+    // Create day boxes
+    for (let i = 1; i <= totalDays; i++) {
         const day = document.createElement('div');
         day.className = 'day-tile';
         day.id = `day-${i}`;
-        day.innerHTML = `<span style="color:var(--neon-cyan); font-weight:900;">${i}</span>`;
-        
-        // Double-tap to strike out the whole day
-        day.ondblclick = function() {
-            this.classList.toggle('done');
-            if(this.classList.contains('done')) {
-                confetti({ particleCount: 150, spread: 70, colors: ['#ff00ff', '#39ff14'] });
-            }
-        };
+        day.innerHTML = `<span style="color:var(--neon-cyan)">${i}</span>`;
         cal.appendChild(day);
 
-        // Populate Dropdown
+        // Fill dropdown
         const opt = document.createElement('option');
         opt.value = i;
         opt.innerText = `April ${i}`;
@@ -44,43 +29,33 @@ function initCalendar() {
     }
 }
 
-// 2. Add Task to selected box
 function addTask() {
-    const input = document.getElementById('taskInput');
-    const dayNum = daySelect.value;
+    const text = document.getElementById('taskInput').value;
+    const day = document.getElementById('daySelect').value;
     const type = document.getElementById('typeSelect').value;
-    
-    if (!input.value) return;
 
-    const targetDay = document.getElementById(`day-${dayNum}`);
-    
-    const taskWrapper = document.createElement('div');
-    taskWrapper.className = `task-pill type-${type}`;
-    
-    // Laser Strike Button included
-    taskWrapper.innerHTML = `
-        <span class="task-text">${input.value}</span>
+    if (!text) return;
+
+    const target = document.getElementById(`day-${day}`);
+    const pill = document.createElement('div');
+    pill.className = `task-pill type-${type}`;
+    pill.innerHTML = `
+        <span class="task-text">${text}</span>
         <button class="complete-btn" onclick="completeTask(this)">⚡</button>
     `;
-
-    targetDay.appendChild(taskWrapper);
-    input.value = "";
+    
+    target.appendChild(pill);
+    document.getElementById('taskInput').value = "";
 }
 
-// 3. Laser Strike Logic
 function completeTask(btn) {
-    const wrapper = btn.parentElement;
-    const isDone = wrapper.classList.toggle('completed');
-    
-    if (isDone) {
-        btn.innerText = '✔️';
-        confetti({
-            particleCount: 100,
-            spread: 60,
-            colors: ['#39ff14', '#ffff00', '#ffffff']
-        });
+    const pill = btn.parentElement;
+    const done = pill.classList.toggle('completed');
+    if (done) {
+        btn.innerText = "✔️";
+        confetti({ particleCount: 100, spread: 70, colors: ['#ff00ff', '#00ffff'] });
     } else {
-        btn.innerText = '⚡';
+        btn.innerText = "⚡";
     }
 }
 
@@ -88,5 +63,5 @@ function toggleCalc() {
     document.getElementById('calc-sidebar').classList.toggle('open');
 }
 
-// RUN ON LOAD
-initCalendar();
+// Start the app
+init();
