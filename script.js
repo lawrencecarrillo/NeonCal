@@ -1,52 +1,46 @@
+// Build Calendar for April 2026 (Starts on Wed)
 const cal = document.getElementById('calendar');
-const taskInput = document.getElementById('taskInput');
-const daySelect = document.getElementById('daySelect');
-
-// 1. Generate 2026 Calendar (Starting with January)
-// Jan 1, 2026 is a Thursday (Day 4 of the week)
-function buildCalendar() {
-    cal.innerHTML = "";
-    for (let i = 1; i <= 31; i++) {
-        const day = document.createElement('div');
-        day.className = 'day-tile';
-        day.id = `day-${i}`;
-        day.innerHTML = `<span style="font-size: 14px; color: #888;">${i}</span>`;
-        
-        // Double tap/click to slash the day done
-        day.ondblclick = () => day.classList.toggle('done');
-        cal.appendChild(day);
-
-        // Add to our dropdown selector
-        const opt = document.createElement('option');
-        opt.value = i;
-        opt.innerText = `Jan ${i}`;
-        daySelect.appendChild(opt);
-    }
+for (let i = 1; i <= 30; i++) {
+    const day = document.createElement('div');
+    day.className = 'day-tile';
+    day.id = `day-${i}`;
+    day.innerHTML = `<span style="color:var(--neon-cyan)">${i}</span>`;
+    
+    // Day Completion Celebration
+    day.ondblclick = function() {
+        this.classList.toggle('done');
+        if(this.classList.contains('done')) {
+            confetti({ particleCount: 200, spread: 100, colors: ['#ff00ff', '#39ff14'] });
+        }
+    };
+    cal.appendChild(day);
 }
 
-// 2. Add Task INSIDE the box
 function addTask() {
-    const text = taskInput.value;
-    const dayId = daySelect.value;
-    if (!text) return;
-
-    const targetDay = document.getElementById(`day-${dayId}`);
-    const taskDiv = document.createElement('div');
-    taskDiv.className = 'inner-task';
+    const input = document.getElementById('taskInput');
+    const dayNum = document.getElementById('daySelect').value;
+    const type = document.getElementById('typeSelect').value;
     
-    if (text.includes('$')) taskDiv.classList.add('bill');
-    taskDiv.innerText = text;
+    if (!input.value) return;
 
-    taskDiv.onclick = function(e) {
-        e.stopPropagation(); // Prevents day toggle
-        const finishing = this.classList.toggle('completed');
-        if (finishing) {
-            confetti({ particleCount: 50, spread: 50, origin: { y: 0.8 } });
+    const target = document.getElementById(`day-${dayNum}`);
+    const pill = document.createElement('div');
+    pill.className = `task-pill type-${type}`;
+    pill.innerText = input.value;
+
+    pill.onclick = function(e) {
+        e.stopPropagation();
+        this.classList.toggle('completed');
+        if(this.classList.contains('completed')) {
+            // "Celebrate You" burst
+            confetti({ particleCount: 80, scalar: 2, shapes: ['star'] });
         }
     };
 
-    targetDay.appendChild(taskDiv);
-    taskInput.value = "";
+    target.appendChild(pill);
+    input.value = "";
 }
 
-buildCalendar();
+function toggleCalc() {
+    document.getElementById('calc-sidebar').classList.toggle('open');
+}
