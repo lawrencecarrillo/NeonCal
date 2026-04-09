@@ -2,107 +2,183 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Glitter Organizer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Neon Sparkle Organizer</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
-        /* 1. The Dark "Anti-Bank" Background */
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-cyan: #00ffff;
+            --neon-gold: #ffeb3b;
+        }
+
         body {
-            background-color: #0a0a0a;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
             color: white;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Helvetica Neue', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            margin: 0;
+            min-height: 100vh;
         }
 
         h1 {
-            color: #fff;
-            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; /* Neon Pink Glow */
-            text-transform: uppercase;
-            letter-spacing: 5px;
+            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+            letter-spacing: 3px;
+            margin-bottom: 20px;
         }
 
-        /* 2. The Task Container */
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+
+        .day-tile {
+            aspect-ratio: 1/1;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        /* The Diagonal Strike */
+        .day-tile.done::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 150%; height: 3px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+            transform: rotate(45deg);
+            transform-origin: 0 0;
+            box-shadow: 0 0 8px #fff;
+        }
+
+        /* Inputs */
+        .input-box {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            background: #000;
+            border: 2px solid var(--neon-cyan);
+            border-radius: 8px;
+            color: white;
+            padding: 12px;
+            outline: none;
+            box-shadow: 0 0 5px var(--neon-cyan);
+        }
+
+        button {
+            background: var(--neon-cyan);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Task List */
         .task-list {
             width: 100%;
             max-width: 400px;
         }
 
         .task-item {
-            background: #1a1a1a;
-            border: 2px solid #00ffff; /* Neon Cyan */
+            background: #111;
+            border: 2px solid var(--neon-cyan);
             border-radius: 12px;
             padding: 15px;
-            margin-bottom: 15px;
-            cursor: pointer;
+            margin-bottom: 12px;
             transition: 0.3s;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
             position: relative;
-            overflow: hidden;
         }
 
-        /* 3. The Strike-Through Logic */
+        .task-item.bill { border-color: var(--neon-gold); box-shadow: 0 0 10px var(--neon-gold); }
+
         .task-item.completed {
-            border-color: #555;
+            opacity: 0.4;
+            border-color: #444;
             box-shadow: none;
-            opacity: 0.6;
         }
 
-        .task-item.completed .text {
+        .completed .text {
             text-decoration: line-through;
-            text-decoration-color: #ff00ff; /* Pink strike line */
+            text-decoration-color: var(--neon-pink);
             text-decoration-thickness: 3px;
-        }
-
-        /* 4. The Glitter/Sparkle Effect (CSS Animation) */
-        .sparkle {
-            position: absolute;
-            background: white;
-            width: 2px;
-            height: 2px;
-            border-radius: 50%;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        @keyframes glitter-burst {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        /* 5. The Diagonal Day Strike */
-        .day-box {
-            width: 100px;
-            height: 100px;
-            border: 2px solid #333;
-            position: relative;
-        }
-
-        .day-box.done::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0;
-            width: 141%; /* Math for diagonal of a square */
-            height: 4px;
-            background: linear-gradient(90deg, #ff00ff, #00ffff);
-            transform: rotate(45deg);
-            transform-origin: top left;
-            box-shadow: 0 0 10px white;
         }
     </style>
 </head>
 <body>
 
-    <h1>Organizer</h1>
+    <h1>NEON DO</h1>
 
-    <div class="task-list">
-        <div class="task-item" onclick="toggleTask(this)">
-            <span class="text">Pay Electric Bill ($120)</span>
-        </div>
-        <div class="task-item" onclick="toggleTask(this)">
-            <span class="text">Finalize App Design</span>
-        </div>
+    <div class="calendar-grid" id="calendar"></div>
+
+    <div class="input-box">
+        <input type="text" id="taskInput" placeholder="Task or Bill (add $)...">
+        <button onclick="addTask()">ADD</button>
     </div>
+
+    <div class="task-list" id="taskList"></div>
+
+    <script>
+        // 1. Build Calendar
+        const cal = document.getElementById('calendar');
+        for (let i = 1; i <= 31; i++) {
+            const day = document.createElement('div');
+            day.className = 'day-tile';
+            day.innerText = i;
+            day.onclick = () => day.classList.toggle('done');
+            cal.appendChild(day);
+        }
+
+        // 2. Add Task Function
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            if (!input.value) return;
+
+            const list = document.getElementById('taskList');
+            const item = document.createElement('div');
+            item.className = 'task-item';
+            
+            if (input.value.includes('$')) item.classList.add('bill');
+
+            item.innerHTML = `<span class="text">${input.value}</span>`;
+            item.onclick = function() {
+                const isFinishing = this.classList.toggle('completed');
+                if (isFinishing) {
+                    confetti({
+                        particleCount: 150,
+                        spread: 60,
+                        colors: ['#ff00ff', '#00ffff', '#ffffff', '#ffeb3b'],
+                        origin: { y: 0.8 }
+                    });
+                }
+            };
+
+            list.prepend(item);
+            input.value = "";
+        }
+    </script>
 </body>
 </html>
