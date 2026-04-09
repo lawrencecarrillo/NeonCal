@@ -13,13 +13,14 @@
 
     <h1>NEON DO</h1>
 
-    <div class="calendar-grid" id="calendar"></div>
+    <div class="calendar-header">JANUARY 2026</div>
 
-    <div class="input-box">
-        <input type="text" id="taskInput" placeholder="Task or Bill (add $)...">
-        <button onclick="addTask()">ADD</button>
-    </div>
+<div class="calendar-grid" id="calendar"></div>
 
+<div class="input-box" style="margin-top: 20px;">
+    <select id="daySelect"></select> <input type="text" id="taskInput" placeholder="Task or Bill (add $)...">
+    <button onclick="addTask()">ADD TO DAY</button>
+</div>
     <div class="task-list" id="taskList"></div>
 
     <script src="script.js"></script>
