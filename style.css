@@ -6,27 +6,45 @@
     --neon-gold: #ffff00;
 }
 
-body {
+/* 1. Prevent "Wobble" on iPhone */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
     background: #000;
-    color: white;
-    font-family: 'Arial Black', sans-serif;
     margin: 0;
-    padding-bottom: 100px;
+    padding: 0;
 }
 
+body {
+    color: white;
+    font-family: 'Arial Black', sans-serif;
+    padding-bottom: 180px; /* Space for the big input panel */
+}
+
+/* 2. Sparkle Header Fix */
 .sparkle-header {
     text-align: center;
-    font-size: 3rem;
+    font-size: clamp(2rem, 8vw, 4rem); /* Responsive sizing */
     padding: 20px;
     background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan), var(--neon-lime), var(--neon-pink));
     background-size: 200%;
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: rainbow 3s linear infinite;
-    filter: drop-shadow(0 0 5px var(--neon-pink));
+    /* Glow effect that won't break the text */
+    filter: drop-shadow(0 0 8px rgba(255, 0, 255, 0.5));
 }
 
 @keyframes rainbow { 0% {background-position: 0%;} 100% {background-position: 200%;} }
+
+/* 3. The Grid Container */
+.calendar-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+}
 
 .weekday-headers {
     display: grid;
@@ -35,14 +53,15 @@ body {
     color: var(--neon-purple);
     font-weight: 900;
     text-transform: uppercase;
-    padding: 10px 20px;
+    margin-bottom: 10px;
 }
 
+/* 4. FORCING BOXES TO SHOW */
 .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
     gap: 15px;
-    padding: 20px;
+    width: 100%;
     min-height: 500px;
 }
 
@@ -54,9 +73,10 @@ body {
     padding: 10px;
     position: relative;
     box-shadow: 0 0 10px rgba(157, 0, 255, 0.2);
+    box-sizing: border-box; /* Critical for grid sizing */
 }
 
-/* Laser Strike through text */
+/* 5. Laser Strike Style */
 .task-pill.completed .task-text {
     text-decoration: line-through;
     text-decoration-color: var(--neon-pink);
@@ -65,16 +85,17 @@ body {
     filter: drop-shadow(0 0 5px var(--neon-pink));
 }
 
-/* Task Pill Colors */
 .task-pill {
     padding: 8px;
     margin: 5px 0;
     border-radius: 8px;
-    font-size: 12px;
+    font-size: 11px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
+
 .type-task { background: var(--neon-lime); color: black; }
 .type-bill { background: var(--neon-gold); color: black; }
 .type-event { background: var(--neon-cyan); color: black; }
@@ -83,56 +104,88 @@ body {
     background: black;
     color: white;
     border: 1px solid white;
-    border-radius: 4px;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
     font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Inputs */
+/* 6. Input Panel Positioning */
 .input-panel {
     position: fixed;
     bottom: 0;
+    left: 0;
     width: 100%;
     background: #111;
     padding: 20px;
-    border-top: 4px solid var(--neon-pink);
+    border-top: 5px solid var(--neon-pink);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    z-index: 50;
+    gap: 12px;
+    z-index: 1000;
+    box-sizing: border-box;
 }
 
 #taskInput {
-    width: 80%;
+    width: 90%;
+    max-width: 500px;
     padding: 15px;
-    background: black;
+    background: #000;
     border: 2px solid var(--neon-pink);
     color: white;
     border-radius: 10px;
+    font-size: 16px;
 }
 
 .add-btn {
-    width: 80%;
+    width: 90%;
+    max-width: 500px;
     padding: 15px;
     background: var(--neon-lime);
+    color: #000;
     font-weight: 900;
     border: none;
     border-radius: 10px;
+    text-transform: uppercase;
+    cursor: pointer;
 }
 
-/* Sidebar */
+/* 7. Side Calculator drawer */
 #calc-sidebar {
     position: fixed;
     right: -320px;
     top: 0;
     width: 300px;
     height: 100%;
-    background: rgba(0,0,0,0.9);
+    background: rgba(0,0,0,0.95);
     border-left: 4px solid var(--neon-cyan);
-    transition: 0.3s;
+    transition: 0.3s ease-in-out;
     padding: 20px;
-    z-index: 100;
+    z-index: 2000;
 }
-#calc-sidebar.open { right: 0; }
-.calc-btn-toggle { position: fixed; right: 20px; top: 40%; background: var(--neon-lime); padding: 15px; border-radius: 50%; cursor: pointer; z-index: 60; }
+
+#calc-sidebar.open {
+    right: 0;
+}
+
+.calc-btn-toggle {
+    position: fixed;
+    right: 20px;
+    top: 30%;
+    background: var(--neon-lime);
+    color: #000;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1500;
+    box-shadow: 0 0 15px var(--neon-lime);
+}
