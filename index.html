@@ -1,28 +1,45 @@
-<div class="theme-switcher">
-    <button class="theme-btn" style="background:#ff00ff" onclick="setTheme('neon')">NEON</button>
-    <button class="theme-btn" style="background:#fff; color:#000" onclick="setTheme('primary')">PRIMARY</button>
-    <button class="theme-btn" style="background:#3e2723; color:#fff" onclick="setTheme('bank')">BANK</button>
-</div>
-
-<h1 class="sparkle-header" id="headerTitle">APRIL 2026</h1>
-
-<div class="calendar-grid" id="calendar"></div>
-
-<div class="input-panel">
-    <select id="daySelect"></select>
-    <select id="typeSelect">
-        <option value="task">TASK</option>
-        <option value="bill">BILL</option>
-    </select>
-    
-    <input type="text" id="taskInput" placeholder="What's the plan?">
-
-    <select id="recurrenceSelect" style="padding: 10px; border-radius: 8px;">
-        <option value="none">ONE TIME ONLY</option>
-        <option value="7">WEEKLY</option>
-        <option value="14">BI-WEEKLY</option>
-        <option value="30">MONTHLY</option>
-    </select>
-
-    <button onclick="addTask()" class="add-btn">ADD TO LIFE</button>
-</div>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.5">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px 'Helvetica Neue'; color: #000000; color: rgba(0, 0, 0, 0.85); -webkit-text-stroke: rgba(0, 0, 0, 0.85)}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px 'Helvetica Neue'; color: #000000; color: rgba(0, 0, 0, 0.85); -webkit-text-stroke: rgba(0, 0, 0, 0.85); min-height: 13.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;div class="theme-switcher"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;button class="theme-btn" style="background:#ff00ff" onclick="setTheme('neon')"&gt;NEON&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;button class="theme-btn" style="background:#fff; color:#000" onclick="setTheme('primary')"&gt;PRIMARY&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;button class="theme-btn" style="background:#3e2723; color:#fff" onclick="setTheme('bank')"&gt;BANK&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;h1 class="sparkle-header" id="headerTitle"&gt;APRIL 2026&lt;/h1&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;div class="calendar-grid" id="calendar"&gt;&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;div class="input-panel"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;select id="daySelect"&gt;&lt;/select&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;select id="typeSelect"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;option value="task"&gt;TASK&lt;/option&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;option value="bill"&gt;BILL&lt;/option&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/select&gt;</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">    </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;input type="text" id="taskInput" placeholder="What's the plan?"&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;select id="recurrenceSelect" style="padding: 10px; border-radius: 8px;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;option value="none"&gt;ONE TIME ONLY&lt;/option&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;option value="7"&gt;WEEKLY&lt;/option&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;option value="14"&gt;BI-WEEKLY&lt;/option&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;option value="30"&gt;MONTHLY&lt;/option&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/select&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;button onclick="addTask()" class="add-btn"&gt;ADD TO LIFE&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/div</span></p>
+</body>
+</html>
