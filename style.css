@@ -1,84 +1,118 @@
-/* --- BIGGER NEON CALENDAR --- */
-
 :root {
     --neon-pink: #ff00ff;
     --neon-cyan: #00ffff;
-    --neon-gold: #ffeb3b;
+    --neon-lime: #39ff14;
+    --neon-purple: #9d00ff;
+    --neon-gold: #ffff00;
 }
 
 body {
     background: #000;
     color: white;
-    font-family: 'Helvetica Neue', sans-serif;
-    padding: 20px;
+    font-family: 'Arial Black', sans-serif;
     margin: 0;
+    overflow-x: hidden;
 }
 
-.calendar-container {
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.calendar-header {
+/* Sparkling Header */
+.sparkle-header {
     text-align: center;
-    text-shadow: 0 0 10px var(--neon-pink);
-    font-size: 2rem;
+    font-size: 3rem;
+    padding: 20px;
+    background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan), var(--neon-lime), var(--neon-pink));
+    background-size: 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rainbow-sparkle 3s linear infinite, glow 1.5s ease-in-out infinite alternate;
 }
 
+@keyframes rainbow-sparkle {
+    0% { background-position: 0%; }
+    100% { background-position: 100%; }
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-pink); }
+    to { text-shadow: 0 0 20px #fff, 0 0 30px var(--neon-cyan); }
+}
+
+/* Calendar Grid */
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    margin-top: 20px;
+    gap: 15px;
+    padding: 20px;
 }
 
-/* BIGGER BOXES */
 .day-tile {
-    min-height: 120px; /* Increased height for tasks */
-    background: #111;
-    border: 2px solid #333;
-    border-radius: 8px;
-    padding: 5px;
+    min-height: 140px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 3px solid var(--neon-purple);
+    border-radius: 15px;
     position: relative;
-    overflow-y: auto; /* Scroll if too many tasks */
-    transition: 0.3s;
+    padding: 5px;
 }
 
-.day-tile.current-month { border-color: #444; }
-.day-tile.today { border-color: var(--neon-cyan); box-shadow: 0 0 10px var(--neon-cyan); }
-
-/* Task styles inside the box */
-.inner-task {
-    font-size: 10px;
-    padding: 4px;
-    margin-top: 4px;
-    border-radius: 4px;
-    background: rgba(0, 255, 255, 0.1);
-    border: 1px solid var(--neon-cyan);
-    color: var(--neon-cyan);
-    cursor: pointer;
+/* Color Coding for Tasks */
+.task-pill {
+    font-size: 11px;
+    font-weight: bold;
+    margin: 4px 0;
+    padding: 6px;
+    border-radius: 8px;
+    text-transform: uppercase;
 }
 
-.inner-task.bill {
-    border-color: var(--neon-gold);
-    color: var(--neon-gold);
-}
+.type-bill { background: var(--neon-gold); color: black; box-shadow: 0 0 10px var(--neon-gold); }
+.type-task { background: var(--neon-lime); color: black; box-shadow: 0 0 10px var(--neon-lime); }
+.type-event { background: var(--neon-cyan); color: black; box-shadow: 0 0 10px var(--neon-cyan); }
 
-.inner-task.completed {
+.completed {
     text-decoration: line-through;
-    opacity: 0.4;
-    border-color: #555;
+    opacity: 0.3;
+    filter: grayscale(1);
 }
 
-/* Bigger Diagonal Slash */
+/* Diagonal Strike */
 .day-tile.done::after {
-    content: "";
+    content: "DONE";
     position: absolute;
-    top: 0; left: 0;
-    width: 150%; height: 6px;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
-    transform: rotate(45deg);
-    transform-origin: 0 0;
-    z-index: 10;
-    pointer-events: none;
+    top: 50%; left: -25%;
+    width: 150%;
+    height: 10px;
+    background: var(--neon-pink);
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 0 20px var(--neon-pink);
+}
+
+/* Side Calculator Drawer */
+#calc-sidebar {
+    position: fixed;
+    right: -300px;
+    top: 0;
+    width: 280px;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    border-left: 4px solid var(--neon-cyan);
+    transition: 0.5s;
+    padding: 20px;
+    z-index: 100;
+}
+
+#calc-sidebar.open { right: 0; }
+
+.calc-btn-toggle {
+    position: fixed;
+    right: 10px;
+    top: 50%;
+    background: var(--neon-cyan);
+    padding: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 15px var(--neon-cyan);
 }
