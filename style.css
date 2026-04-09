@@ -1,187 +1,51 @@
-/* --- THEME 1: NEON (Default) --- */
 :root {
-    --bg-color: #000000;
-    --header-color: #ff00ff;
-    --grid-border: #9d00ff;
-    --text-color: #ffffff;
-    --input-bg: #111111;
-    --btn-main: #39ff14; /* Fluorescent Lime */
-    --accent-cyan: #00ffff;
-    --accent-gold: #ffff00;
+    --bg-color: #000; --text-color: #fff; --grid-border: #9d00ff;
+    --type-task: #39ff14; --type-bill: #ffff00; --type-event: #00ffff;
 }
 
-/* --- THEME 2: PRIMARY (Lighter/Basic) --- */
 body.theme-primary {
-    --bg-color: #ffffff;
-    --header-color: #d32f2f; /* Primary Red */
-    --grid-border: #1976d2; /* Primary Blue */
-    --text-color: #222222;
-    --input-bg: #f5f5f5;
-    --btn-main: #388e3c; /* Basic Green */
-    --accent-cyan: #0288d1;
-    --accent-gold: #fbc02d;
+    --bg-color: #ffffff; --text-color: #222; --grid-border: #1976d2;
+    --type-task: #4caf50; --type-bill: #d32f2f; --type-event: #2196f3;
 }
 
-/* --- THEME 3: BANK (Traditional/Browns) --- */
 body.theme-bank {
-    --bg-color: #3e2723; /* Deep Espresso Brown */
-    --header-color: #ffb300; /* Amber Gold */
-    --grid-border: #5d4037; /* Leather Brown */
-    --text-color: #efebe9;
-    --input-bg: #2d1d1a;
-    --btn-main: #8d6e63;
-    --accent-cyan: #80cbc4;
-    --accent-gold: #ffd54f;
+    --bg-color: #3e2723; --text-color: #efebe9; --grid-border: #5d4037;
+    --type-task: #8d99ae; --type-bill: #d4a373; --type-event: #a5a58d;
 }
 
-/* --- GLOBAL STYLES --- */
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: 'Arial Black', sans-serif;
-    margin: 0;
-    padding-bottom: 220px; /* Space for the input panel */
-    transition: all 0.4s ease; /* Makes theme switching smooth */
+    margin: 0; padding-bottom: 220px;
+    transition: all 0.4s ease;
+    overflow-x: hidden;
 }
 
-/* Theme Switcher Bar */
-.theme-switcher {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    padding: 15px;
-    background: rgba(0,0,0,0.3);
-}
-
-.theme-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
+/* --- UI ELEMENTS --- */
+.theme-switcher { display: flex; justify-content: center; gap: 10px; padding: 15px; background: rgba(0,0,0,0.2); }
+.theme-btn { padding: 8px 15px; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; }
 .neon-btn { background: #ff00ff; color: white; }
 .primary-btn { background: #1976d2; color: white; }
 .bank-btn { background: #5d4037; color: #ffb300; }
 
-/* Header */
-.sparkle-header {
-    text-align: center;
-    font-size: 3rem;
-    padding: 20px;
-    text-shadow: 0 0 10px var(--header-color);
-    margin: 0;
-}
+.sparkle-header { text-align: center; font-size: 3rem; margin: 20px 0; text-shadow: 0 0 10px var(--type-event); }
 
-/* Grid Layout */
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 12px;
-    padding: 20px;
-}
+.weekday-headers { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 900; color: var(--grid-border); padding: 10px; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; padding: 0 10px; }
 
-.weekday-headers {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    text-align: center;
-    font-weight: 900;
-    color: var(--grid-border);
-    padding: 10px 20px;
-    text-transform: uppercase;
-}
+.day-tile { min-height: 130px; border: 2px solid var(--grid-border); border-radius: 10px; padding: 5px; background: rgba(255,255,255,0.02); }
 
-.day-tile {
-    min-height: 140px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 3px solid var(--grid-border);
-    border-radius: 12px;
-    padding: 8px;
-    position: relative;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-}
+/* --- TASK PILLS --- */
+.task-pill { margin-top: 5px; padding: 6px; border-radius: 5px; font-size: 10px; display: flex; justify-content: space-between; align-items: center; color: #000; }
+.type-task { background: var(--type-task); }
+.type-bill { background: var(--type-bill); }
+.type-event { background: var(--type-event); }
 
-/* The Laser Strike */
-.task-pill.completed .task-text {
-    text-decoration: line-through;
-    text-decoration-color: #ff00ff;
-    text-decoration-thickness: 4px;
-    opacity: 0.4;
-    filter: drop-shadow(0 0 5px #ff00ff);
-}
+.completed { opacity: 0.3; text-decoration: line-through; filter: grayscale(1); }
 
-.task-pill {
-    margin-top: 5px;
-    padding: 6px;
-    border-radius: 6px;
-    font-size: 11px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-}
-
-.type-task { background: var(--btn-main); color: #000; }
-.type-bill { background: var(--accent-gold); color: #000; }
-.type-event { background: var(--accent-cyan); color: #000; }
-
-/* Bottom Panel */
-.input-panel {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: var(--input-bg);
-    border-top: 5px solid var(--header-color);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    box-sizing: border-box;
-}
-
-.input-selectors select {
-    padding: 10px;
-    border-radius: 8px;
-    background: #000;
-    color: white;
-    border: 2px solid var(--accent-cyan);
-}
-
-#taskInput {
-    width: 90%;
-    max-width: 600px;
-    padding: 15px;
-    background: #000;
-    border: 2px solid var(--header-color);
-    color: white;
-    border-radius: 10px;
-}
-
-.main-add-btn {
-    width: 90%;
-    max-width: 600px;
-    padding: 15px;
-    background: var(--btn-main);
-    border: none;
-    border-radius: 10px;
-    font-weight: 900;
-    cursor: pointer;
-}
-
-/* Sidebar */
-#calc-sidebar {
-    position: fixed;
-    right: -320px;
-    top: 0;
-    width: 300px;
-    height: 100%;
-    background: rgba(0,0,0,0.9);
-    border-left: 4px solid var(--accent-cyan);
-    transition: 0.3s;
-    padding: 20px;
-}
-
-#calc-sidebar.open { right: 0; }
+/* --- INPUT PANEL --- */
+.input-panel { position: fixed; bottom: 0; width: 100%; background: #111; padding: 20px; border-top: 5px solid var(--type-event); display: flex; flex-direction: column; align-items: center; gap: 10px; box-sizing: border-box; }
+#ai-status { font-size: 9px; color: var(--type-task); letter-spacing: 1.5px; }
+#taskInput { width: 90%; max-width: 500px; padding: 12px; border-radius: 8px; border: 2px solid var(--type-event); background: #000; color: #fff; }
+.main-add-btn { width: 90%; max-width: 500px; padding: 15px; background: var(--type-task); font-weight: 900; border: none; border-radius: 8px; cursor: pointer; }

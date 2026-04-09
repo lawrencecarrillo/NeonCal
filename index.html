@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEON DO | 2026 Organizer</title>
+    <title>NEON DO | AI Organizer</title>
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="theme-neon"> <div class="theme-switcher">
+<body class="theme-neon">
+
+    <div class="theme-switcher">
         <button class="theme-btn neon-btn" onclick="setTheme('neon')">NEON</button>
         <button class="theme-btn primary-btn" onclick="setTheme('primary')">PRIMARY</button>
         <button class="theme-btn bank-btn" onclick="setTheme('bank')">BANK</button>
@@ -17,42 +18,19 @@
 
     <h1 class="sparkle-header" id="monthDisplay">APRIL 2026</h1>
 
-    <div class="calc-btn-toggle" onclick="toggleCalc()">🧮</div>
-
-    <div id="calc-sidebar">
-        <h2 class="sidebar-title">CALCULATOR</h2>
-        <div class="calc-box">
-            <div id="calcDisplay">0.00</div>
-        </div>
-        <button onclick="toggleCalc()" class="close-sidebar">CLOSE</button>
-    </div>
-
     <div class="calendar-container">
-        
         <div class="weekday-headers">
-            <div>Sun</div>
-            <div>Mon</div>
-            <div>Tue</div>
-            <div>Wed</div>
-            <div>Thu</div>
-            <div>Fri</div>
-            <div>Sat</div>
+            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div>
+            <div>Thu</div><div>Fri</div><div>Sat</div>
         </div>
-
         <div class="calendar-grid" id="calendar"></div>
-
     </div>
 
     <div class="input-panel">
+        <div id="ai-status">● AI SMART-SENSING ACTIVE</div>
+        
         <div class="input-selectors">
             <select id="daySelect"></select>
-            
-            <select id="typeSelect">
-                <option value="task">TASK (LIME)</option>
-                <option value="bill">BILL (GOLD)</option>
-                <option value="event">EVENT (CYAN)</option>
-            </select>
-
             <select id="recurrenceSelect">
                 <option value="0">ONE TIME</option>
                 <option value="7">WEEKLY</option>
@@ -61,7 +39,7 @@
             </select>
         </div>
 
-        <input type="text" id="taskInput" placeholder="Organize your life in color...">
+        <input type="text" id="taskInput" placeholder="Try: 'Pay Rent $2000' or 'Meet with Coach'...">
         
         <button onclick="addTask()" class="main-add-btn">ADD TO LIFE</button>
     </div>
