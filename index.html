@@ -2,45 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEON DO | AI Organizer 2026</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEON DO | 2026</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="theme-neon">
+<body>
 
     <div class="theme-switcher">
-        <button class="theme-btn neon-btn" onclick="setTheme('neon')">NEON</button>
-        <button class="theme-btn primary-btn" onclick="setTheme('primary')">PRIMARY</button>
-        <button class="theme-btn bank-btn" onclick="setTheme('bank')">BANK</button>
+        <button class="theme-btn" style="background:#ff00ff; color:white;" onclick="setTheme('neon')">NEON</button>
+        <button class="theme-btn" style="background:#1976d2; color:white;" onclick="setTheme('primary')">PRIMARY</button>
+        <button class="theme-btn" style="background:#5d4037; color:#ffb300;" onclick="setTheme('bank')">BANK</button>
     </div>
 
-    <h1 class="sparkle-header">APRIL 2026</h1>
+    <h1 style="text-align:center; text-transform:uppercase;">April 2026</h1>
 
-    <div class="calendar-container">
-        <div class="weekday-headers">
-            <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div>
-            <div>THU</div><div>FRI</div><div>SAT</div>
-        </div>
-        <div class="calendar-grid" id="calendar"></div>
-    </div>
+    <div class="calendar-grid" id="calendar"></div>
 
     <div class="input-panel">
-        <div id="ai-status">● AI SMART-SENSING ACTIVE</div>
-        
-        <div class="input-selectors">
-            <select id="daySelect"></select>
-            <select id="recurrenceSelect">
+        <div style="font-size:9px; color:#39ff14; margin-bottom:5px;">● AI SMART-SENSING: ACTIVE</div>
+        <div style="display:flex; gap:10px; width:100%; max-width:500px;">
+            <select id="daySelect" style="flex:1; padding:10px;"></select>
+            <select id="recurrenceSelect" style="flex:1; padding:10px;">
                 <option value="0">ONE TIME</option>
                 <option value="7">WEEKLY</option>
                 <option value="14">BI-WEEKLY</option>
                 <option value="30">MONTHLY</option>
             </select>
         </div>
-
-        <input type="text" id="taskInput" placeholder="Ex: 'Pay Rent $2000' or 'Meet with Team'...">
-        
+        <input type="text" id="taskInput" placeholder="Ex: 'Dr. Smith at 2pm' or 'Yoga Class'">
         <button onclick="addTask()" class="main-add-btn">ADD TO LIFE</button>
     </div>
 
