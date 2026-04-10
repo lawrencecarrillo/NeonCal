@@ -1,94 +1,143 @@
 const cal = document.getElementById('calendar');
 const daySelect = document.getElementById('daySelect');
+const mainHeader = document.getElementById('mainHeader');
 
-// The list of categories for manual cycling
+// Data Management
+let currentMonth = 3; // April (0-indexed)
+let currentYear = 2026;
 const types = ['task', 'bill', 'event', 'doctor', 'holiday', 'self'];
+let savedTasks = JSON.parse(localStorage.getItem('neonLifeData')) || [];
 
-function init() {
-    const startDayOffset = 3; // April 2026 starts on Wednesday
+function initCalendar() {
     cal.innerHTML = "";
     daySelect.innerHTML = "";
+    
+    const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+    mainHeader.innerText = `${monthNames[currentMonth]} ${currentYear}`;
 
-    // 1. Create Spacers for Sunday-Saturday alignment
-    for (let i = 0; i < startDayOffset; i++) {
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+    // 1. Spacers
+    for (let i = 0; i < firstDay; i++) {
         const spacer = document.createElement('div');
         spacer.className = 'day-tile'; spacer.style.border = "none";
         cal.appendChild(spacer);
     }
 
-    // 2. Create April Boxes
-    for (let i = 1; i <= 30; i++) {
+    // 2. Days
+    for (let i = 1; i <= daysInMonth; i++) {
         const day = document.createElement('div');
-        day.className = 'day-tile'; day.id = `day-${i}`;
+        day.className = 'day-tile';
+        day.id = `day-${currentYear}-${currentMonth}-${i}`;
         day.innerHTML = `<span style="opacity:0.5; font-size:10px">${i}</span>`;
         cal.appendChild(day);
 
         let opt = document.createElement('option');
-        opt.value = i; opt.innerText = `April ${i}`;
+        opt.value = i; opt.innerText = `${monthNames[currentMonth].substring(0,3)} ${i}`;
         daySelect.appendChild(opt);
     }
+    
+    renderSavedTasks();
 }
 
-function setTheme(t) {
-    document.body.className = `theme-${t}`;
+function renderSavedTasks() {
+    savedTasks.forEach(task => {
+        // Only show tasks for the current visible month/year
+        if (task.month === currentMonth && task.year === currentYear) {
+            injectTaskToUI(task);
+        }
+    });
 }
 
 function addTask() {
-    const input = document.getElementById('taskInput');
-    const text = input.value;
+    const text = document.getElementById('taskInput').value;
     const startDay = parseInt(daySelect.value);
     const interval = parseInt(document.getElementById('recurrenceSelect').value);
-
     if (!text) return;
 
-    // --- AI SMART SENSING ---
     let type = 'task';
     const lower = text.toLowerCase();
-    if (lower.includes('$') || lower.includes('pay') || lower.includes('rent')) type = 'bill';
-    else if (lower.includes('dr') || lower.includes('doctor') || lower.includes('dentist')) type = 'doctor';
-    else if (lower.includes('party') || lower.includes('holiday') || lower.includes('birthday')) type = 'holiday';
-    else if (lower.includes('gym') || lower.includes('yoga') || lower.includes('meditate')) type = 'self';
-    else if (lower.includes('meet') || lower.includes('zoom') || lower.includes('call')) type = 'event';
+    if (lower.includes('$') || lower.includes('pay')) type = 'bill';
+    else if (lower.includes('dr') || lower.includes('doctor')) type = 'doctor';
+    else if (lower.includes('party') || lower.includes('holiday')) type = 'holiday';
+    else if (lower.includes('gym') || lower.includes('yoga')) type = 'self';
+    else if (lower.includes('meet') || lower.includes('with')) type = 'event';
 
-    function inject(d) {
-        const box = document.getElementById(`day-${d}`);
-        if (!box) return;
+    const newTask = {
+        id: Date.now(),
+        text: text,
+        day: startDay,
+        month: currentMonth,
+        year: currentYear,
+        type: type,
+        completed: false
+    };
 
-        const pill = document.createElement('div');
-        pill.className = `task-pill type-${type}`;
-        pill.dataset.typeIndex = types.indexOf(type);
-        
-        // MANUAL OVERRIDE: Click the pill to change color
-        pill.onclick = function(e) {
-            let currentIndex = parseInt(this.dataset.typeIndex);
-            let nextIndex = (currentIndex + 1) % types.length;
-            this.className = `task-pill type-${types[nextIndex]}`;
-            this.dataset.typeIndex = nextIndex;
-        };
-
-        pill.innerHTML = `
-            <span>${text}</span>
-            <div style="display:flex; gap:5px;">
-                <button onclick="event.stopPropagation(); this.parentElement.parentElement.classList.toggle('completed'); confetti({particleCount:30})" style="cursor:pointer; border:none; border-radius:3px;">⚡</button>
-                <button onclick="event.stopPropagation(); this.parentElement.parentElement.remove()" style="cursor:pointer; border:none; border-radius:3px;">🗑️</button>
-            </div>
-        `;
-        box.appendChild(pill);
-    }
-
-    inject(startDay);
-
-    // Recurring Logic
+    savedTasks.push(newTask);
+    
+    // Handle Recurrence for the whole year (next 12 months)
     if (interval > 0) {
-        let next = startDay + interval;
-        while (next <= 30) {
-            inject(next);
-            next += interval;
+        let nextDate = new Date(currentYear, currentMonth, startDay + interval);
+        for(let i=0; i<12; i++) { // Auto-fill for a year
+            if (nextDate.getFullYear() > 2027) break; 
+            savedTasks.push({
+                id: Date.now() + nextDate.getTime(),
+                text: text,
+                day: nextDate.getDate(),
+                month: nextDate.getMonth(),
+                year: nextDate.getFullYear(),
+                type: type,
+                completed: false
+            });
+            nextDate.setDate(nextDate.getDate() + interval);
         }
     }
 
-    input.value = "";
-    confetti({ particleCount: 100, spread: 70, origin: { y: 0.8 } });
+    saveAndRefresh();
+    document.getElementById('taskInput').value = "";
+    confetti({ particleCount: 100 });
 }
 
-init();
+function injectTaskToUI(task) {
+    const box = document.getElementById(`day-${task.year}-${task.month}-${task.day}`);
+    if (!box) return;
+
+    const pill = document.createElement('div');
+    pill.className = `task-pill type-${task.type} ${task.completed ? 'completed' : ''}`;
+    pill.innerHTML = `
+        <span>${task.text}</span>
+        <div style="display:flex; gap:5px;">
+            <button onclick="toggleComplete(${task.id})" style="cursor:pointer; border:none;">⚡</button>
+            <button onclick="deleteTask(${task.id})" style="cursor:pointer; border:none;">🗑️</button>
+        </div>
+    `;
+    box.appendChild(pill);
+}
+
+function toggleComplete(id) {
+    savedTasks = savedTasks.map(t => t.id === id ? {...t, completed: !t.completed} : t);
+    if(savedTasks.find(t => t.id === id).completed) confetti({particleCount:40});
+    saveAndRefresh();
+}
+
+function deleteTask(id) {
+    savedTasks = savedTasks.filter(t => t.id !== id);
+    saveAndRefresh();
+}
+
+function saveAndRefresh() {
+    localStorage.setItem('neonLifeData', JSON.stringify(savedTasks));
+    initCalendar();
+}
+
+function changeMonth(dir) {
+    currentMonth += dir;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    initCalendar();
+}
+
+function setTheme(t) { document.body.className = `theme-${t}`; }
+
+initCalendar();

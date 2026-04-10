@@ -1,28 +1,56 @@
+/* --- THEME VARIABLE ENGINE --- */
 :root {
-    --bg-color: #000; --text-color: #fff; --grid-border: #9d00ff;
-    --type-task: #39ff14; --type-bill: #ffff00; --type-event: #00ffff;
-    --type-doctor: #ff00ff; --type-holiday: #ff9100; --type-self: #9d00ff;
+    /* Default Neon (High Energy) */
+    --bg-color: #000; 
+    --text-color: #fff; 
+    --grid-border: #9d00ff;
+    --type-task: #39ff14;   /* Lime */
+    --type-bill: #ffff00;   /* Gold */
+    --type-event: #00ffff;  /* Cyan */
+    --type-doctor: #ff00ff; /* Neon Pink */
+    --type-holiday: #ff9100;/* Bright Orange */
+    --type-self: #9d00ff;   /* Deep Purple */
 }
 
 body.theme-primary {
-    --bg-color: #ffffff; --text-color: #222; --grid-border: #1976d2;
-    --type-task: #4caf50; --type-bill: #d32f2f; --type-event: #2196f3;
-    --type-doctor: #e91e63; --type-holiday: #ff5722; --type-self: #673ab7;
+    /* Clean Primary (Direct/Bold) */
+    --bg-color: #ffffff; 
+    --text-color: #222; 
+    --grid-border: #1976d2;
+    --type-task: #4caf50;   /* Green */
+    --type-bill: #d32f2f;   /* Red */
+    --type-event: #2196f3;  /* Blue */
+    --type-doctor: #e91e63; /* Pink */
+    --type-holiday: #ff5722;/* Deep Orange */
+    --type-self: #673ab7;   /* Purple */
 }
 
 body.theme-bank {
-    --bg-color: #3e2723; --text-color: #efebe9; --grid-border: #5d4037;
-    --type-task: #8d99ae; --type-bill: #d4a373; --type-event: #a5a58d;
-    --type-doctor: #b08968; --type-holiday: #bc6c25; --type-self: #606c38;
+    /* Traditional Bank (Grounded/Muted) */
+    --bg-color: #3e2723;    /* Espresso Brown */
+    --text-color: #efebe9; 
+    --grid-border: #5d4037;
+    --type-task: #8d99ae;   /* Slate */
+    --type-bill: #d4a373;   /* Tan */
+    --type-event: #a5a58d;  /* Sage */
+    --type-doctor: #b08968; /* Cocoa */
+    --type-holiday: #bc6c25;/* Earth Orange */
+    --type-self: #606c38;   /* Dark Moss */
 }
 
+/* --- CORE GLOBAL STYLES --- */
 body {
-    background-color: var(--bg-color); color: var(--text-color);
-    font-family: 'Arial Black', sans-serif; transition: 0.4s;
-    margin: 0; padding-bottom: 240px; overflow-x: hidden;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Arial Black', sans-serif;
+    transition: all 0.4s ease;
+    margin: 0;
+    padding-bottom: 260px; /* Space for the floating input panel */
+    overflow-x: hidden;
 }
 
-/* --- SPARKLING HEADER LOGIC --- */
+/* --- SPARKLING NEON HEADER --- */
+/* This only animates when theme-neon is active or no class is set */
 .theme-neon .sparkle-text, body:not([class*="theme-"]) .sparkle-text {
     background: linear-gradient(90deg, #ff00ff, #00ffff, #39ff14, #ff00ff);
     background-size: 200%;
@@ -33,54 +61,189 @@ body {
     filter: drop-shadow(0 0 10px #ff00ff);
 }
 
-@keyframes sparkle-move { 0% { background-position: 0%; } 100% { background-position: 200%; } }
-
-/* --- GRID --- */
-.weekday-headers {
-    display: grid; grid-template-columns: repeat(7, 1fr);
-    text-align: center; font-weight: 900; padding: 10px;
-    color: var(--grid-border); font-size: 11px; letter-spacing: 1px;
+@keyframes sparkle-move {
+    0% { background-position: 0%; }
+    100% { background-position: 200%; }
 }
 
-.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; padding: 0 15px; }
+/* Month Navigation Layout */
+.header-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.nav-btn {
+    background: transparent;
+    border: 2px solid var(--grid-border);
+    color: var(--text-color);
+    font-size: 24px;
+    padding: 5px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.nav-btn:hover {
+    background: var(--grid-border);
+    color: #fff;
+}
+
+/* --- CALENDAR GRID --- */
+.calendar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.weekday-headers {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: 900;
+    color: var(--grid-border);
+    padding: 10px 0;
+    letter-spacing: 2px;
+    font-size: 12px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
 
 .day-tile {
-    min-height: 140px; border: 2px solid var(--grid-border);
-    border-radius: 12px; padding: 8px; background: rgba(255,255,255,0.02);
+    min-height: 140px;
+    border: 2px solid var(--grid-border);
+    border-radius: 12px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    box-sizing: border-box;
+    transition: transform 0.2s;
 }
 
 /* --- TASK PILLS --- */
 .task-pill {
-    margin-top: 5px; padding: 8px; border-radius: 6px; font-size: 10px;
-    display: flex; justify-content: space-between; align-items: center;
-    color: #000; font-weight: bold; cursor: pointer;
+    margin-top: 5px;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
-.type-task { background: var(--type-task); }
-.type-bill { background: var(--type-bill); }
-.type-event { background: var(--type-event); }
-.type-doctor { background: var(--type-doctor); }
-.type-holiday { background: var(--type-holiday); }
-.type-self { background: var(--type-self); }
+/* Color Classes applied by JS */
+.type-task { background-color: var(--type-task); }
+.type-bill { background-color: var(--type-bill); }
+.type-event { background-color: var(--type-event); }
+.type-doctor { background-color: var(--type-doctor); }
+.type-holiday { background-color: var(--type-holiday); }
+.type-self { background-color: var(--type-self); }
 
-.completed { opacity: 0.3; text-decoration: line-through; filter: grayscale(1); }
+.completed {
+    opacity: 0.3;
+    text-decoration: line-through;
+    filter: grayscale(1);
+}
 
-/* --- UI PANELS --- */
-.theme-switcher { display: flex; justify-content: center; gap: 10px; padding: 15px; }
-.theme-btn { padding: 8px 15px; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 10px; }
+/* --- UI / THEME SWITCHER --- */
+.theme-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 15px;
+    background: rgba(0,0,0,0.1);
+}
+
+.theme-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 11px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
 .neon-btn { background: #ff00ff; color: #fff; }
 .primary-btn { background: #1976d2; color: #fff; }
 .bank-btn { background: #5d4037; color: #ffb300; }
 
+/* --- FLOATING INPUT PANEL --- */
 .input-panel {
-    position: fixed; bottom: 0; width: 100%; background: #111;
-    padding: 20px; border-top: 5px solid var(--grid-border);
-    display: flex; flex-direction: column; align-items: center; gap: 10px; box-sizing: border-box;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #111;
+    padding: 20px;
+    border-top: 5px solid var(--grid-border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    box-sizing: border-box;
+    z-index: 1000;
 }
 
-#ai-status { font-size: 9px; color: #39ff14; letter-spacing: 2px; }
-.input-selectors { display: flex; gap: 10px; width: 100%; max-width: 500px; }
-.input-selectors select { flex: 1; padding: 10px; border-radius: 5px; background: #000; color: #fff; border: 1px solid #444; }
-#taskInput { width: 100%; max-width: 500px; padding: 15px; background: #000; color: #fff; border: 2px solid var(--grid-border); border-radius: 8px; font-size: 16px; }
-.main-add-btn { width: 100%; max-width: 500px; padding: 15px; background: var(--type-task); color: #000; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; }
-.hint-text { font-size: 8px; margin: 0; opacity: 0.6; color: #fff; }
+#ai-status {
+    font-size: 10px;
+    color: #39ff14; /* Lime */
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.input-selectors {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.input-selectors select {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    background: #000;
+    color: #fff;
+    border: 1px solid #444;
+}
+
+#taskInput {
+    width: 100%;
+    max-width: 500px;
+    padding: 15px;
+    background: #000;
+    color: #fff;
+    border: 2px solid var(--grid-border);
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.main-add-btn {
+    width: 100%;
+    max-width: 500px;
+    padding: 18px;
+    background: var(--type-task);
+    color: #000;
+    font-weight: 900;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.hint-text {
+    font-size: 9px;
+    margin: 0;
+    opacity: 0.6;
+    color: #fff;
+}

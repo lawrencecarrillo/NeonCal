@@ -15,7 +15,11 @@
         <button class="theme-btn bank-btn" onclick="setTheme('bank')">BANK</button>
     </div>
 
-    <h1 id="mainHeader" class="sparkle-text">APRIL 2026</h1>
+    <div class="header-nav">
+        <button class="nav-btn" onclick="changeMonth(-1)">◀</button>
+        <h1 id="mainHeader" class="sparkle-text">APRIL 2026</h1>
+        <button class="nav-btn" onclick="changeMonth(1)">▶</button>
+    </div>
 
     <div class="calendar-container">
         <div class="weekday-headers">
@@ -26,7 +30,7 @@
     </div>
 
     <div class="input-panel">
-        <div id="ai-status">● AI SMART-SENSING + MANUAL OVERRIDE ACTIVE</div>
+        <div id="ai-status">● AI PERSISTENT MEMORY ACTIVE</div>
         
         <div class="input-selectors">
             <select id="daySelect"></select>
@@ -38,10 +42,10 @@
             </select>
         </div>
 
-        <input type="text" id="taskInput" placeholder="Try: 'Pay Rent' or 'Dr. Appointment'...">
+        <input type="text" id="taskInput" placeholder="Try: 'Rent $2000' or 'Meet with Team'...">
         
         <button onclick="addTask()" class="main-add-btn">ADD TO LIFE</button>
-        <p class="hint-text">Tip: Tap a task to manually change its color!</p>
+        <p class="hint-text">Data is automatically saved to your device.</p>
     </div>
 
     <script src="script.js"></script>
