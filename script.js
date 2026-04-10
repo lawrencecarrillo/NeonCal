@@ -1,38 +1,40 @@
 const cal = document.getElementById('calendar');
 const daySelect = document.getElementById('daySelect');
 
-function init() {
-    // April 2026 starts on Wednesday (3 spacers)
-    const spacers = 3;
-    const totalDays = 30;
+// 1. Build 2026 April Calendar (Starts on Wed)
+function initCalendar() {
+    const startDayOffset = 3; // Wed
+    const daysInMonth = 30;
     cal.innerHTML = "";
     daySelect.innerHTML = "";
 
-    for (let i = 0; i < spacers; i++) {
-        const div = document.createElement('div');
-        div.className = 'day-tile';
-        div.style.border = "none";
-        cal.appendChild(div);
+    for (let i = 0; i < startDayOffset; i++) {
+        const spacer = document.createElement('div');
+        spacer.className = 'day-tile';
+        spacer.style.border = "none";
+        cal.appendChild(spacer);
     }
 
-    for (let i = 1; i <= totalDays; i++) {
+    for (let i = 1; i <= daysInMonth; i++) {
         const day = document.createElement('div');
         day.className = 'day-tile';
         day.id = `day-${i}`;
-        day.innerHTML = `<span style="font-size:12px opacity:0.6">${i}</span>`;
+        day.innerHTML = `<span style="opacity: 0.5; font-size: 10px;">${i}</span>`;
         cal.appendChild(day);
 
-        let opt = document.createElement('option');
+        const opt = document.createElement('option');
         opt.value = i;
         opt.innerText = `April ${i}`;
         daySelect.appendChild(opt);
     }
 }
 
+// 2. Theme Toggle
 function setTheme(t) {
-    document.body.className = t === 'neon' ? 'theme-neon' : `theme-${t}`;
+    document.body.className = (t === 'neon') ? 'theme-neon' : `theme-${t}`;
 }
 
+// 3. AI Task Addition
 function addTask() {
     const input = document.getElementById('taskInput');
     const text = input.value;
@@ -41,32 +43,42 @@ function addTask() {
 
     if (!text) return;
 
-    // AI SMART-SENSING LOGIC
-    let type = 'task'; // Default
-    const lowerText = text.toLowerCase();
-    if (lowerText.includes('$') || lowerText.includes('pay') || lowerText.includes('rent')) type = 'bill';
-    if (lowerText.includes('meet') || lowerText.includes('appt') || lowerText.includes('with')) type = 'event';
+    // AI INTENT PARSING
+    let type = 'task'; 
+    const lower = text.toLowerCase();
+    if (lower.includes('$') || lower.includes('pay') || lower.includes('bill')) type = 'bill';
+    if (lower.includes('meet') || lower.includes('with') || lower.includes('appt')) type = 'event';
 
-    function inject(d) {
+    function createPill(d) {
         const box = document.getElementById(`day-${d}`);
         if (!box) return;
+
         const pill = document.createElement('div');
         pill.className = `task-pill type-${type}`;
-        pill.innerHTML = `<span>${text}</span> <div onclick="this.parentElement.classList.toggle('completed'); confetti({particleCount:30})">⚡</div>`;
+        pill.innerHTML = `
+            <span>${text}</span>
+            <div class="task-actions">
+                <button class="task-btn" onclick="this.parentElement.parentElement.classList.toggle('completed'); confetti({particleCount:40})">⚡</button>
+                <button class="task-btn" onclick="this.parentElement.parentElement.remove()">🗑️</button>
+            </div>
+        `;
         box.appendChild(pill);
     }
 
-    inject(startDay);
+    // Initial Place
+    createPill(startDay);
+
+    // Recurring Loop
     if (interval > 0) {
         let next = startDay + interval;
         while (next <= 30) {
-            inject(next);
+            createPill(next);
             next += interval;
         }
     }
 
     input.value = "";
-    confetti({ particleCount: 100, colors: ['#ff00ff', '#00ffff'] });
+    confetti({ particleCount: 100, spread: 70, origin: { y: 0.8 } });
 }
 
-init();
+initCalendar();

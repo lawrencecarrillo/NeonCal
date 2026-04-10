@@ -1,3 +1,4 @@
+/* --- THEME VARIABLE ENGINE --- */
 :root {
     --bg-color: #000; --text-color: #fff; --grid-border: #9d00ff;
     --type-task: #39ff14; --type-bill: #ffff00; --type-event: #00ffff;
@@ -13,39 +14,48 @@ body.theme-bank {
     --type-task: #8d99ae; --type-bill: #d4a373; --type-event: #a5a58d;
 }
 
+/* --- BASE STYLES --- */
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: 'Arial Black', sans-serif;
-    margin: 0; padding-bottom: 220px;
+    margin: 0; padding-bottom: 240px;
     transition: all 0.4s ease;
-    overflow-x: hidden;
 }
 
-/* --- UI ELEMENTS --- */
-.theme-switcher { display: flex; justify-content: center; gap: 10px; padding: 15px; background: rgba(0,0,0,0.2); }
-.theme-btn { padding: 8px 15px; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; }
+.theme-switcher { display: flex; justify-content: center; gap: 10px; padding: 15px; background: rgba(0,0,0,0.1); }
+.theme-btn { padding: 10px 15px; border: none; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 10px; }
 .neon-btn { background: #ff00ff; color: white; }
 .primary-btn { background: #1976d2; color: white; }
 .bank-btn { background: #5d4037; color: #ffb300; }
 
-.sparkle-header { text-align: center; font-size: 3rem; margin: 20px 0; text-shadow: 0 0 10px var(--type-event); }
+.sparkle-header { text-align: center; font-size: 2.5rem; margin: 20px 0; text-transform: uppercase; }
 
-.weekday-headers { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 900; color: var(--grid-border); padding: 10px; }
-.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; padding: 0 10px; }
+.calendar-container { max-width: 1000px; margin: 0 auto; padding: 0 10px; }
+.weekday-headers { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 10px; color: var(--grid-border); margin-bottom: 10px; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
 
-.day-tile { min-height: 130px; border: 2px solid var(--grid-border); border-radius: 10px; padding: 5px; background: rgba(255,255,255,0.02); }
+.day-tile { min-height: 120px; border: 2px solid var(--grid-border); border-radius: 8px; padding: 5px; background: rgba(255,255,255,0.02); overflow-y: auto; }
 
 /* --- TASK PILLS --- */
-.task-pill { margin-top: 5px; padding: 6px; border-radius: 5px; font-size: 10px; display: flex; justify-content: space-between; align-items: center; color: #000; }
+.task-pill { 
+    margin-top: 5px; padding: 6px; border-radius: 4px; font-size: 10px; 
+    display: flex; justify-content: space-between; align-items: center; 
+    color: #000; font-weight: bold;
+}
 .type-task { background: var(--type-task); }
 .type-bill { background: var(--type-bill); }
 .type-event { background: var(--type-event); }
 
-.completed { opacity: 0.3; text-decoration: line-through; filter: grayscale(1); }
+.task-actions { display: flex; gap: 4px; }
+.task-btn { border: 1px solid rgba(0,0,0,0.2); background: rgba(255,255,255,0.3); border-radius: 3px; cursor: pointer; padding: 2px 4px; font-size: 9px; }
 
-/* --- INPUT PANEL --- */
-.input-panel { position: fixed; bottom: 0; width: 100%; background: #111; padding: 20px; border-top: 5px solid var(--type-event); display: flex; flex-direction: column; align-items: center; gap: 10px; box-sizing: border-box; }
-#ai-status { font-size: 9px; color: var(--type-task); letter-spacing: 1.5px; }
-#taskInput { width: 90%; max-width: 500px; padding: 12px; border-radius: 8px; border: 2px solid var(--type-event); background: #000; color: #fff; }
-.main-add-btn { width: 90%; max-width: 500px; padding: 15px; background: var(--type-task); font-weight: 900; border: none; border-radius: 8px; cursor: pointer; }
+.completed { text-decoration: line-through; opacity: 0.3; filter: grayscale(1); }
+
+/* --- AI INPUT PANEL --- */
+.input-panel { position: fixed; bottom: 0; width: 100%; background: #111; padding: 20px; border-top: 4px solid var(--grid-border); display: flex; flex-direction: column; align-items: center; gap: 10px; box-sizing: border-box; z-index: 1000; }
+#ai-status { font-size: 10px; color: #39ff14; letter-spacing: 2px; }
+.input-selectors { display: flex; gap: 10px; width: 100%; max-width: 500px; }
+.input-selectors select { flex: 1; padding: 10px; border-radius: 5px; background: #000; color: #fff; border: 1px solid #444; }
+#taskInput { width: 100%; max-width: 500px; padding: 15px; border-radius: 8px; border: 2px solid var(--grid-border); background: #000; color: #fff; font-size: 16px; }
+.main-add-btn { width: 100%; max-width: 500px; padding: 15px; background: var(--type-task); font-weight: 900; border: none; border-radius: 8px; cursor: pointer; }
