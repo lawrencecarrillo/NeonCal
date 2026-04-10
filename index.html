@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEON DO | AI Life Organizer</title>
+    <title>NEON DO | AI Organizer 2026</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -30,8 +30,7 @@
     </div>
 
     <div class="input-panel">
-        <div id="ai-status">● AI PERSISTENT MEMORY ACTIVE</div>
-        
+        <div id="ai-status">● AI MEMORY + MANUAL COLOR OVERRIDE</div>
         <div class="input-selectors">
             <select id="daySelect"></select>
             <select id="recurrenceSelect">
@@ -41,11 +40,9 @@
                 <option value="30">MONTHLY</option>
             </select>
         </div>
-
-        <input type="text" id="taskInput" placeholder="Try: 'Rent $2000' or 'Meet with Team'...">
-        
+        <input type="text" id="taskInput" placeholder="Try: 'Pay Rent' or 'Dr. Smith'">
         <button onclick="addTask()" class="main-add-btn">ADD TO LIFE</button>
-        <p class="hint-text">Data is automatically saved to your device.</p>
+        <p class="hint-text">Tap a task to cycle colors. Changes save automatically.</p>
     </div>
 
     <script src="script.js"></script>
