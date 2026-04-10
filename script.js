@@ -1,126 +1,239 @@
-const cal = document.getElementById('calendar');
-const daySelect = document.getElementById('daySelect');
-const mainHeader = document.getElementById('mainHeader');
+// ── STATE ─────────────────────────────────────────────
+let currentMonth = new Date().getMonth();
+let currentYear  = new Date().getFullYear();
+let tasks = JSON.parse(localStorage.getItem('neoncal-tasks') || '[]');
 
-// Setup
-let currentMonth = 3; // April
-let currentYear = 2026;
-const types = ['task', 'bill', 'event', 'doctor', 'holiday', 'self'];
-let savedTasks = JSON.parse(localStorage.getItem('neonLifeData')) || [];
+const MONTHS = [
+  'JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE',
+  'JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'
+];
 
-function initCalendar() {
-    cal.innerHTML = "";
-    daySelect.innerHTML = "";
-    const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
-    mainHeader.innerText = `${monthNames[currentMonth]} ${currentYear}`;
+const TYPES = ['task','bill','event','doctor','holiday','self','birthday','sub'];
 
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+// ── CALENDAR ──────────────────────────────────────────
+function buildCalendar() {
+  const cal      = document.getElementById('calendar');
+  const daySelect = document.getElementById('daySelect');
+  const label    = document.getElementById('monthLabel');
 
-    // Spacers
-    for (let i = 0; i < firstDay; i++) {
-        const spacer = document.createElement('div');
-        spacer.className = 'day-tile'; spacer.style.border = "none";
-        cal.appendChild(spacer);
-    }
+  cal.innerHTML      = '';
+  daySelect.innerHTML = '';
+  label.textContent  = MONTHS[currentMonth] + ' ' + currentYear;
 
-    // Days
-    for (let i = 1; i <= daysInMonth; i++) {
-        const day = document.createElement('div');
-        day.className = 'day-tile';
-        day.id = `day-${currentYear}-${currentMonth}-${i}`;
-        day.innerHTML = `<span style="opacity:0.5; font-size:10px">${i}</span>`;
-        cal.appendChild(day);
+  const firstDay    = new Date(currentYear, currentMonth, 1).getDay();
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const today       = new Date();
 
-        let opt = document.createElement('option');
-        opt.value = i; opt.innerText = `${monthNames[currentMonth].substring(0,3)} ${i}`;
-        daySelect.appendChild(opt);
-    }
-    renderSavedTasks();
-}
+  // Spacer cells for alignment
+  for (let i = 0; i < firstDay; i++) {
+    const blank = document.createElement('div');
+    blank.className = 'day-cell empty';
+    cal.appendChild(blank);
+  }
 
-function renderSavedTasks() {
-    savedTasks.forEach(task => {
-        if (task.month === currentMonth && task.year === currentYear) {
-            const box = document.getElementById(`day-${task.year}-${task.month}-${task.day}`);
-            if (!box) return;
+  // Day cells
+  for (let d = 1; d <= daysInMonth; d++) {
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+    cell.id = cellId(currentYear, currentMonth, d);
 
-            const pill = document.createElement('div');
-            pill.className = `task-pill type-${task.type} ${task.completed ? 'completed' : ''}`;
-            
-            // MANUAL OVERRIDE LOGIC
-            pill.onclick = function() {
-                let currentIndex = types.indexOf(task.type);
-                task.type = types[(currentIndex + 1) % types.length];
-                saveAndRefresh();
-            };
+    const isToday = (
+      d === today.getDate() &&
+      currentMonth === today.getMonth() &&
+      currentYear  === today.getFullYear()
+    );
+    if (isToday) cell.classList.add('today');
 
-            pill.innerHTML = `
-                <span>${task.text}</span>
-                <div style="display:flex; gap:5px;">
-                    <button onclick="event.stopPropagation(); toggleComplete(${task.id})" style="border:none; cursor:pointer;">⚡</button>
-                    <button onclick="event.stopPropagation(); deleteTask(${task.id})" style="border:none; cursor:pointer;">🗑️</button>
-                </div>
-            `;
-            box.appendChild(pill);
-        }
+    const num = document.createElement('span');
+    num.className   = 'day-num';
+    num.textContent = d;
+    cell.appendChild(num);
+
+    // Double-click to slash the whole day
+    cell.addEventListener('dblclick', () => {
+      cell.classList.toggle('done');
+      if (cell.classList.contains('done')) {
+        fireworks();
+      }
     });
+
+    cal.appendChild(cell);
+
+    // Populate day dropdown
+    const opt = document.createElement('option');
+    opt.value     = d;
+    opt.textContent = MONTHS[currentMonth].slice(0, 3) + ' ' + d;
+    daySelect.appendChild(opt);
+  }
+
+  renderTasks();
 }
 
-function addTask() {
-    const input = document.getElementById('taskInput');
-    const text = input.value;
-    const startDay = parseInt(daySelect.value);
-    const interval = parseInt(document.getElementById('recurrenceSelect').value);
-    if (!text) return;
+function cellId(y, m, d) {
+  return 'cell-' + y + '-' + m + '-' + d;
+}
 
-    // AI SENSING
-    let type = 'task';
-    const lower = text.toLowerCase();
-    if (lower.includes('$') || lower.includes('pay')) type = 'bill';
-    else if (lower.includes('dr') || lower.includes('doctor')) type = 'doctor';
-    else if (lower.includes('party') || lower.includes('holiday')) type = 'holiday';
-    else if (lower.includes('gym') || lower.includes('yoga')) type = 'self';
-    else if (lower.includes('meet') || lower.includes('with')) type = 'event';
-
-    const newTask = { id: Date.now(), text, day: startDay, month: currentMonth, year: currentYear, type, completed: false };
-    savedTasks.push(newTask);
-
-    if (interval > 0) {
-        let next = new Date(currentYear, currentMonth, startDay + interval);
-        for(let i=0; i<12; i++) {
-            savedTasks.push({ id: Date.now() + next.getTime(), text, day: next.getDate(), month: next.getMonth(), year: next.getFullYear(), type, completed: false });
-            next.setDate(next.getDate() + interval);
-        }
+// ── RENDER SAVED TASKS ────────────────────────────────
+function renderTasks() {
+  tasks.forEach(t => {
+    if (t.month === currentMonth && t.year === currentYear) {
+      injectPill(t);
     }
-
-    input.value = "";
-    saveAndRefresh();
-    confetti({ particleCount: 100 });
+  });
 }
 
-function toggleComplete(id) {
-    savedTasks = savedTasks.map(t => t.id === id ? {...t, completed: !t.completed} : t);
-    saveAndRefresh();
+function injectPill(task) {
+  const box = document.getElementById(cellId(task.year, task.month, task.day));
+  if (!box) return;
+
+  const pill = document.createElement('div');
+  pill.className = 'task-pill type-' + task.type + (task.done ? ' done-task' : '');
+  pill.dataset.id = task.id;
+
+  // Click body = cycle color
+  pill.addEventListener('click', function(e) {
+    if (e.target.classList.contains('pill-btn')) return;
+    const idx  = TYPES.indexOf(task.type);
+    task.type  = TYPES[(idx + 1) % TYPES.length];
+    save();
+    pill.className = 'task-pill type-' + task.type + (task.done ? ' done-task' : '');
+  });
+
+  pill.innerHTML =
+    '<span class="pill-text">' + task.text + '</span>' +
+    '<div class="pill-actions">' +
+      '<button class="pill-btn" title="Complete" onclick="completeTask(' + task.id + ', this)">&#9889;</button>' +
+      '<button class="pill-btn" title="Delete"   onclick="deleteTask('  + task.id + ')">&#10005;</button>' +
+    '</div>';
+
+  box.appendChild(pill);
+}
+
+// ── ADD TASK ──────────────────────────────────────────
+function addTask() {
+  const input    = document.getElementById('taskInput');
+  const text     = input.value.trim();
+  const day      = parseInt(document.getElementById('daySelect').value);
+  const interval = parseInt(document.getElementById('recurSelect').value);
+
+  if (!text) return;
+
+  // AI Smart-Sensing
+  const lower = text.toLowerCase();
+  let type = 'task';
+
+  if      (lower.includes('birthday') || lower.includes('bday'))                       type = 'birthday';
+  else if (lower.includes('holiday') || lower.includes('vacation') || lower.includes('party'))  type = 'holiday';
+  else if (lower.includes('dr ') || lower.includes('doctor') || lower.includes('dentist') || lower.includes('appt') || lower.includes('checkup')) type = 'doctor';
+  else if (lower.includes('gym') || lower.includes('yoga') || lower.includes('spa') || lower.includes('meditat') || lower.includes('self')) type = 'self';
+  else if (lower.includes('meet') || lower.includes('zoom') || lower.includes('call') || lower.includes('with '))  type = 'event';
+  else if (lower.includes('netflix') || lower.includes('spotify') || lower.includes('hulu') || lower.includes('sub') || lower.includes('subscription')) type = 'sub';
+  else if (lower.includes('$') || lower.includes('pay') || lower.includes('rent') || lower.includes('bill') || lower.includes('insurance')) type = 'bill';
+
+  // Place task (and recurrences)
+  const base = new Date(currentYear, currentMonth, day);
+  let date   = new Date(base);
+
+  for (let i = 0; i < (interval > 0 ? 13 : 1); i++) {
+    if (i > 0) date.setDate(date.getDate() + interval);
+    if (date.getFullYear() > currentYear + 1) break;
+
+    tasks.push({
+      id:    Date.now() + i,
+      text:  text,
+      type:  type,
+      day:   date.getDate(),
+      month: date.getMonth(),
+      year:  date.getFullYear(),
+      done:  false
+    });
+  }
+
+  save();
+  buildCalendar();
+  input.value = '';
+  pop();
+}
+
+// ── COMPLETE / DELETE ─────────────────────────────────
+function completeTask(id, btn) {
+  const task = tasks.find(t => t.id === id);
+  if (!task) return;
+  task.done = !task.done;
+  save();
+  buildCalendar();
+  if (task.done) celebrate();
 }
 
 function deleteTask(id) {
-    savedTasks = savedTasks.filter(t => t.id !== id);
-    saveAndRefresh();
+  tasks = tasks.filter(t => t.id !== id);
+  save();
+  buildCalendar();
 }
 
-function saveAndRefresh() {
-    localStorage.setItem('neonLifeData', JSON.stringify(savedTasks));
-    initCalendar();
-}
-
+// ── NAVIGATION ────────────────────────────────────────
 function changeMonth(dir) {
-    currentMonth += dir;
-    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-    initCalendar();
+  currentMonth += dir;
+  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+  if (currentMonth < 0)  { currentMonth = 11; currentYear--; }
+  buildCalendar();
 }
 
-function setTheme(t) { document.body.className = `theme-${t}`; }
+// ── THEME ─────────────────────────────────────────────
+function setTheme(t) {
+  document.body.className = 'theme-' + t;
+}
 
-initCalendar();
+// ── CALCULATOR ────────────────────────────────────────
+let calcStr = '';
+
+function toggleCalc() {
+  document.getElementById('calcSidebar').classList.toggle('open');
+}
+
+function calcInput(val) {
+  calcStr += val;
+  document.getElementById('calcDisplay').textContent = calcStr;
+}
+
+function calcEquals() {
+  try {
+    const result = Function('"use strict"; return (' + calcStr + ')')();
+    calcStr = String(parseFloat(result.toFixed(10)));
+    document.getElementById('calcDisplay').textContent = calcStr;
+  } catch(e) {
+    document.getElementById('calcDisplay').textContent = 'ERROR';
+    calcStr = '';
+  }
+}
+
+function calcClear() {
+  calcStr = '';
+  document.getElementById('calcDisplay').textContent = '0';
+}
+
+// ── SAVE ──────────────────────────────────────────────
+function save() {
+  localStorage.setItem('neoncal-tasks', JSON.stringify(tasks));
+}
+
+// ── CONFETTI ──────────────────────────────────────────
+function celebrate() {
+  confetti({
+    particleCount: 120,
+    spread: 70,
+    colors: ['#ff00ff','#00ffff','#39ff14','#ffff00','#ff6600'],
+    origin: { y: 0.6 }
+  });
+}
+
+function fireworks() {
+  confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
+}
+
+function pop() {
+  confetti({ particleCount: 60, spread: 50, origin: { y: 0.9 } });
+}
+
+// ── INIT ──────────────────────────────────────────────
+buildCalendar();

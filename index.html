@@ -1,50 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEON DO | AI Organizer 2026</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>NeonCal 2026</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body class="theme-neon">
 
-    <div class="theme-switcher">
-        <button class="theme-btn neon-btn" onclick="setTheme('neon')">NEON</button>
-        <button class="theme-btn primary-btn" onclick="setTheme('primary')">PRIMARY</button>
-        <button class="theme-btn bank-btn" onclick="setTheme('bank')">BANK</button>
+  <!-- Theme Switcher -->
+  <div class="theme-bar">
+    <button class="t-btn neon-btn" onclick="setTheme('neon')">NEON</button>
+    <button class="t-btn primary-btn" onclick="setTheme('primary')">PRIMARY</button>
+    <button class="t-btn bank-btn" onclick="setTheme('bank')">BANK</button>
+  </div>
+
+  <!-- Header -->
+  <div class="header-nav">
+    <button class="nav-arrow" onclick="changeMonth(-1)">&#9664;</button>
+    <h1 class="sparkle-text" id="monthLabel">APRIL 2026</h1>
+    <button class="nav-arrow" onclick="changeMonth(1)">&#9654;</button>
+  </div>
+
+  <!-- Weekday Labels -->
+  <div class="weekday-row">
+    <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div>
+    <div>THU</div><div>FRI</div><div>SAT</div>
+  </div>
+
+  <!-- Calendar Grid -->
+  <div class="cal-grid" id="calendar"></div>
+
+  <!-- Calculator Sidebar -->
+  <button class="calc-toggle" onclick="toggleCalc()">&#9998;</button>
+
+  <div class="calc-sidebar" id="calcSidebar">
+    <h2 class="calc-title">CALC</h2>
+    <div class="calc-display" id="calcDisplay">0</div>
+    <div class="calc-keys">
+      <button onclick="calcInput('7')">7</button>
+      <button onclick="calcInput('8')">8</button>
+      <button onclick="calcInput('9')">9</button>
+      <button class="op" onclick="calcInput('/')">&#247;</button>
+
+      <button onclick="calcInput('4')">4</button>
+      <button onclick="calcInput('5')">5</button>
+      <button onclick="calcInput('6')">6</button>
+      <button class="op" onclick="calcInput('*')">&#215;</button>
+
+      <button onclick="calcInput('1')">1</button>
+      <button onclick="calcInput('2')">2</button>
+      <button onclick="calcInput('3')">3</button>
+      <button class="op" onclick="calcInput('-')">&#8722;</button>
+
+      <button onclick="calcInput('0')">0</button>
+      <button onclick="calcInput('.')">.</button>
+      <button class="op" onclick="calcEquals()">=</button>
+      <button class="op" onclick="calcInput('+')">+</button>
+
+      <button class="clear-btn" onclick="calcClear()">CLEAR</button>
+      <button class="close-btn" onclick="toggleCalc()">CLOSE</button>
+    </div>
+  </div>
+
+  <!-- Input Panel -->
+  <div class="input-panel">
+    <div class="ai-status">&#11044; AI SMART-SENSING ACTIVE &mdash; TAP ANY TASK TO CHANGE COLOR</div>
+
+    <div class="input-row">
+      <select id="daySelect"></select>
+      <select id="recurSelect">
+        <option value="0">ONE TIME</option>
+        <option value="7">WEEKLY</option>
+        <option value="14">BI-WEEKLY</option>
+        <option value="30">MONTHLY</option>
+      </select>
     </div>
 
-    <div class="header-nav">
-        <button class="nav-btn" onclick="changeMonth(-1)">◀</button>
-        <h1 id="mainHeader" class="sparkle-text">APRIL 2026</h1>
-        <button class="nav-btn" onclick="changeMonth(1)">▶</button>
-    </div>
+    <input type="text" id="taskInput" placeholder="e.g. Pay Rent $1800 or Dr. Smith 2pm or Yoga Class" />
+    <button class="add-btn" onclick="addTask()">ADD TO LIFE</button>
+  </div>
 
-    <div class="calendar-container">
-        <div class="weekday-headers">
-            <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div>
-            <div>THU</div><div>FRI</div><div>SAT</div>
-        </div>
-        <div class="calendar-grid" id="calendar"></div>
-    </div>
-
-    <div class="input-panel">
-        <div id="ai-status">● AI MEMORY + MANUAL COLOR OVERRIDE</div>
-        <div class="input-selectors">
-            <select id="daySelect"></select>
-            <select id="recurrenceSelect">
-                <option value="0">ONE TIME</option>
-                <option value="7">WEEKLY</option>
-                <option value="14">BI-WEEKLY</option>
-                <option value="30">MONTHLY</option>
-            </select>
-        </div>
-        <input type="text" id="taskInput" placeholder="Try: 'Pay Rent' or 'Dr. Smith'">
-        <button onclick="addTask()" class="main-add-btn">ADD TO LIFE</button>
-        <p class="hint-text">Tap a task to cycle colors. Changes save automatically.</p>
-    </div>
-
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
