@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEON DO | AI Organizer 2026</title>
+    <title>NEON DO | AI Life Organizer</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -26,7 +26,8 @@
     </div>
 
     <div class="input-panel">
-        <div id="ai-status">● AI SMART-SENSING + MANUAL OVERRIDE</div>
+        <div id="ai-status">● AI SMART-SENSING + MANUAL OVERRIDE ACTIVE</div>
+        
         <div class="input-selectors">
             <select id="daySelect"></select>
             <select id="recurrenceSelect">
@@ -36,9 +37,11 @@
                 <option value="30">MONTHLY</option>
             </select>
         </div>
-        <input type="text" id="taskInput" placeholder="Ex: 'Pay Rent' or 'Dr. Smith'">
+
+        <input type="text" id="taskInput" placeholder="Try: 'Pay Rent' or 'Dr. Appointment'...">
+        
         <button onclick="addTask()" class="main-add-btn">ADD TO LIFE</button>
-        <p style="font-size: 8px; margin-top: 5px; opacity: 0.7;">Tip: Tap the task itself to manually cycle colors!</p>
+        <p class="hint-text">Tip: Tap a task to manually change its color!</p>
     </div>
 
     <script src="script.js"></script>

@@ -22,35 +22,38 @@ body {
     margin: 0; padding-bottom: 240px; overflow-x: hidden;
 }
 
-/* --- SPARKLING NEON HEADER --- */
-.theme-neon .sparkle-text {
+/* --- SPARKLING HEADER LOGIC --- */
+.theme-neon .sparkle-text, body:not([class*="theme-"]) .sparkle-text {
     background: linear-gradient(90deg, #ff00ff, #00ffff, #39ff14, #ff00ff);
     background-size: 200%;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: sparkle-move 3s linear infinite;
     filter: drop-shadow(0 0 10px #ff00ff);
 }
 
-@keyframes sparkle-move {
-    0% { background-position: 0%; }
-    100% { background-position: 200%; }
-}
+@keyframes sparkle-move { 0% { background-position: 0%; } 100% { background-position: 200%; } }
 
+/* --- GRID --- */
 .weekday-headers {
     display: grid; grid-template-columns: repeat(7, 1fr);
     text-align: center; font-weight: 900; padding: 10px;
-    color: var(--grid-border); font-size: 12px;
+    color: var(--grid-border); font-size: 11px; letter-spacing: 1px;
 }
 
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; padding: 0 15px; }
-.day-tile { min-height: 140px; border: 2px solid var(--grid-border); border-radius: 12px; padding: 8px; background: rgba(255,255,255,0.02); }
+
+.day-tile {
+    min-height: 140px; border: 2px solid var(--grid-border);
+    border-radius: 12px; padding: 8px; background: rgba(255,255,255,0.02);
+}
 
 /* --- TASK PILLS --- */
-.task-pill { 
-    margin-top: 5px; padding: 8px; border-radius: 6px; font-size: 10px; 
-    display: flex; justify-content: space-between; align-items: center; 
-    color: #000; font-weight: bold; cursor: pointer; /* Pointer shows it's clickable */
+.task-pill {
+    margin-top: 5px; padding: 8px; border-radius: 6px; font-size: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+    color: #000; font-weight: bold; cursor: pointer;
 }
 
 .type-task { background: var(--type-task); }
@@ -62,13 +65,22 @@ body {
 
 .completed { opacity: 0.3; text-decoration: line-through; filter: grayscale(1); }
 
-/* --- INPUT PANEL --- */
-.input-panel { position: fixed; bottom: 0; width: 100%; background: #111; padding: 20px; border-top: 5px solid var(--grid-border); display: flex; flex-direction: column; align-items: center; gap: 10px; box-sizing: border-box; }
+/* --- UI PANELS --- */
 .theme-switcher { display: flex; justify-content: center; gap: 10px; padding: 15px; }
-.theme-btn { padding: 10px 15px; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 10px; }
+.theme-btn { padding: 8px 15px; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 10px; }
 .neon-btn { background: #ff00ff; color: #fff; }
 .primary-btn { background: #1976d2; color: #fff; }
 .bank-btn { background: #5d4037; color: #ffb300; }
 
-#taskInput { width: 100%; max-width: 500px; padding: 15px; border-radius: 8px; border: 2px solid var(--grid-border); background: #000; color: #fff; font-size: 16px; }
-.main-add-btn { width: 100%; max-width: 500px; padding: 15px; background: var(--type-task); font-weight: 900; border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase; }
+.input-panel {
+    position: fixed; bottom: 0; width: 100%; background: #111;
+    padding: 20px; border-top: 5px solid var(--grid-border);
+    display: flex; flex-direction: column; align-items: center; gap: 10px; box-sizing: border-box;
+}
+
+#ai-status { font-size: 9px; color: #39ff14; letter-spacing: 2px; }
+.input-selectors { display: flex; gap: 10px; width: 100%; max-width: 500px; }
+.input-selectors select { flex: 1; padding: 10px; border-radius: 5px; background: #000; color: #fff; border: 1px solid #444; }
+#taskInput { width: 100%; max-width: 500px; padding: 15px; background: #000; color: #fff; border: 2px solid var(--grid-border); border-radius: 8px; font-size: 16px; }
+.main-add-btn { width: 100%; max-width: 500px; padding: 15px; background: var(--type-task); color: #000; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; }
+.hint-text { font-size: 8px; margin: 0; opacity: 0.6; color: #fff; }
